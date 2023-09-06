@@ -17,10 +17,6 @@ module.exports.createEmployee = async (req, res) => {
 
     console.log(req.body);
 
-    // adding salt and password hashing
-    //  const salt = await bcrypt.genSalt(10);
-    //  const secPass = await bcrypt.hash(password, salt);
-
     const employee = new Employee({
       name,
       email,
@@ -65,7 +61,7 @@ module.exports.getEmployee = async (req, res) => {
 
 // Login employee
 module.exports.login = async (req, res) => {
-  // email and password coming from Client(user) try to login
+  // email and password coming from Employee(user) try to login
   const { email, password } = req.body;
 
   try {
@@ -113,20 +109,20 @@ module.exports.updateEmployee = async (req, res) => {
   try {
     const { name, email, role } = req.body;
 
-    // create a newNote Object
+    // create a newEmployee Object
     const newEmployee = {
       name,
       email,
       role,
     };
 
-    // Find a note to be updated and check if it exists
+    // Find a emp to be updated and check if it exists
     let emp = await Employee.findById(req.params.id);
     if (!emp) {
       return res.status(404).send("Employee not found.");
     }
 
-    // actually updating the node
+    // actually updating the emp
     emp = await Employee.findByIdAndUpdate(
       req.params.id,
       { $set: newEmployee },

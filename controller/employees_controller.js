@@ -15,13 +15,13 @@ module.exports.getAllEmployees = async (req, res) => {
 // Deleting the employee
 module.exports.delete = async (req, res) => {
   try {
-    // Find a habit to be deleted and check if it exists
+    // Find a emp to be deleted and check if it exists
     let emp = await Employee.findById(req.params.id);
     if (!emp) {
       return res.status(404).send("Employee not found.");
     }
 
-    // actually deleting the habit
+    // actually deleting the emp
     emp = await Employee.findByIdAndDelete(req.params.id);
     return res.json({
       success: "Employee successfully deleted",
@@ -82,7 +82,7 @@ module.exports.assign = async (req, res) => {
 
     emp = await Employee.findByIdAndUpdate(
       eid,
-      { $push: { assignedEmployees: { name, id } } }, // Assuming you send the employee ID in the request body
+      { $push: { assignedEmployees: { name, id } } },
       { new: true }
     );
 
@@ -100,23 +100,15 @@ module.exports.giveFeedback = async (req, res) => {
   try {
     const afeID = req.params.id;
 
-    console.log("id : => " + afeID);
     let addFeedbackEmp = await Employee.findById(afeID);
 
     const { feedback, eid } = req.body;
 
     let givenByEmployee = await Employee.findById(eid);
 
-    // console.log("Add feedback employee : " + addFeedbackEmp);
-    // console.log(givenByEmployee);
-
-    // console.log(req.body);
-
     const GivenByname = givenByEmployee.name;
     const addFeedbackEmpname = addFeedbackEmp.name;
     const addFeedbackEmpID = addFeedbackEmp._id;
-
-    // console.log(GivenByname, addFeedbackEmpname);
 
     if (!addFeedbackEmp && !givenByEmployee) {
       return res.status(404).send("Employee not found.");
